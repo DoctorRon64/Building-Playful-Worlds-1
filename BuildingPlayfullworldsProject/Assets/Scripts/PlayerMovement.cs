@@ -6,29 +6,29 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
 	[Header("Movement")]
-	public float moveSpeed;
+	public float MoveSpeed;
 
 	[Header("Jumping")]
-	public float jumpForce;
-	public float jumpCooldown;
-	public float airMultiplier;
+	public float JumpForce;
+	public float JumpCooldown;
+	public float AirMultiplier;
 
 	[Header("Ground Check")]
-	public float groundDrag;
-	public LayerMask groundMask;
-	public bool isGrounded;
+	public float GroundDrag;
+	public LayerMask GroundMask;
+	public bool IsGrounded;
 
 	[Header("import stuff")]
 	public Transform Player;
-	public Rigidbody rb;
-	public Camera cam;
-	float horizontalInput;
-	float verticalInput;
+	public Rigidbody RigidBody;
+	public Camera Camera;
+	private float horizontalInput;
+	private float verticalInput;
 
 	private void Awake()
 	{
-		rb = GetComponent<Rigidbody>();
-		rb.freezeRotation = true;
+		RigidBody = GetComponent<Rigidbody>();
+		RigidBody.freezeRotation = true;
 	}
 
 	private void Update()
@@ -46,12 +46,12 @@ public class PlayerMovement : MonoBehaviour
 
 	private void OnTriggerStay(Collider other)
 	{
-		isGrounded = true;
+		IsGrounded = true;
 	}
 
 	private void OnTriggerExit(Collider other)
 	{
-		isGrounded = false;
+		IsGrounded = false;
 	}
 
 	private void KeyInput()
@@ -59,7 +59,7 @@ public class PlayerMovement : MonoBehaviour
 		horizontalInput = Input.GetAxisRaw("Horizontal");
 		verticalInput = Input.GetAxisRaw("Vertical");
 
-		if (Input.GetKey(KeyCode.Space) && isGrounded)
+		if (Input.GetKey(KeyCode.Space) && IsGrounded)
 		{
 			Jump();		
 		}
@@ -67,20 +67,20 @@ public class PlayerMovement : MonoBehaviour
 
 	private void GroundCheck()
 	{
-		if (isGrounded)
+		if (IsGrounded)
 		{
-			rb.drag = groundDrag;
+			RigidBody.drag = GroundDrag;
 		}
-		if (!isGrounded)
+		if (!IsGrounded)
 		{
-			rb.drag = 0;
+			RigidBody.drag = 0;
 		}
 	}
 
 	private void RotatePlayer()
 	{
 		RaycastHit hit;
-		Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+		Ray ray = Camera.ScreenPointToRay(Input.mousePosition);
 		
 		if (Physics.Raycast(ray, out hit))
 		{
@@ -95,29 +95,29 @@ public class PlayerMovement : MonoBehaviour
 
     private void MovePlayer()
 	{
-		if (isGrounded)
+		if (IsGrounded)
 		{
-			if (horizontalInput > 0) { transform.Translate(Vector3.right * Time.deltaTime * moveSpeed, Space.World); }
-            if (horizontalInput < 0) { transform.Translate(Vector3.left * Time.deltaTime * moveSpeed, Space.World); }
-            if (verticalInput > 0) { transform.Translate(Vector3.forward * Time.deltaTime * moveSpeed, Space.World); }
-            if (verticalInput < 0) { transform.Translate(Vector3.back * Time.deltaTime * moveSpeed, Space.World); }
+			if (horizontalInput > 0) { transform.Translate(Vector3.right * Time.deltaTime * MoveSpeed, Space.World); }
+            if (horizontalInput < 0) { transform.Translate(Vector3.left * Time.deltaTime * MoveSpeed, Space.World); }
+            if (verticalInput > 0) { transform.Translate(Vector3.forward * Time.deltaTime * MoveSpeed, Space.World); }
+            if (verticalInput < 0) { transform.Translate(Vector3.back * Time.deltaTime * MoveSpeed, Space.World); }
         }
 	}
 
 	private void SpeedControl()
 	{
-		Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-		if (flatVel.magnitude > moveSpeed)
+		Vector3 flatVel = new Vector3(RigidBody.velocity.x, 0f, RigidBody.velocity.z);
+		if (flatVel.magnitude > MoveSpeed)
 		{
-			Vector3 limiedVel = flatVel.normalized * moveSpeed;
-			rb.velocity = new Vector3(limiedVel.x, rb.velocity.y, limiedVel.z);
+			Vector3 limiedVel = flatVel.normalized * MoveSpeed;
+			RigidBody.velocity = new Vector3(limiedVel.x, RigidBody.velocity.y, limiedVel.z);
 		}
 	}
 
 	private void Jump()
 	{
-		rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-		rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+		RigidBody.velocity = new Vector3(RigidBody.velocity.x, 0f, RigidBody.velocity.z);
+		RigidBody.AddForce(transform.up * JumpForce, ForceMode.Impulse);
 	}
 }
 	

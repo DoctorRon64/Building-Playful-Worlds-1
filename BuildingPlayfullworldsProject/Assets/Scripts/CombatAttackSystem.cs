@@ -4,22 +4,22 @@ using UnityEngine;
 
 public class CombatAttackSystem : MonoBehaviour
 {
-	public float hitCooldownValue;
-    public float hitCooldown = 2;
-    public int attackDamage;
-	public Animator anim;
-	public GameObject swordModel;
+	public float HitCooldownValue;
+    public float HitCooldown = 2;
+    public int AttackDamage;
+	public Animator AnimatorController;
+	public GameObject SwordModel;
 
 	private void Awake()
 	{
-		swordModel.SetActive(false);
+		SwordModel.SetActive(false);
 	}
 
 	public void Update()
 	{
 		InputSystem();
 
-		if (hitCooldownValue > 0)
+		if (HitCooldownValue > 0)
 		{
 			Invoke("TickingTimer", 1);
 		}
@@ -27,14 +27,14 @@ public class CombatAttackSystem : MonoBehaviour
 
 	private void TickingTimer()
 	{
-		hitCooldownValue -= 1;
+		HitCooldownValue -= 1;
 	}
 
 	private void InputSystem()
 	{
 		if (Input.GetKey(KeyCode.E))
 		{
-			if (hitCooldownValue <= 0)
+			if (HitCooldownValue <= 0)
 			{
 				Attack();
 			}
@@ -43,15 +43,15 @@ public class CombatAttackSystem : MonoBehaviour
 
     private void Attack()
 	{
-		hitCooldownValue += hitCooldown;
-		swordModel.SetActive(true);
-		anim.Play(" ");
-		Invoke("ResetAttack", hitCooldown);
+		HitCooldownValue += HitCooldown;
+		SwordModel.SetActive(true);
+		AnimatorController.Play(" ");
+		Invoke("ResetAttack", HitCooldown);
 	}
 
 	private void ResetAttack()
 	{
-        swordModel.SetActive(false);
+        SwordModel.SetActive(false);
     }
 
 }
