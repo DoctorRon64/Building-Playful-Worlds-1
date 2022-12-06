@@ -5,8 +5,13 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+	public enum StateEnum { Idle, Walk, Crouch, Jump, Sprint }
+	public StateEnum currentState;
+
 	[Header("Movement")]
 	public float MoveSpeed;
+	public float SprintSpeed;
+	public float CroachSpeed;
 
 	[Header("Jumping")]
 	public float JumpForce;
@@ -16,19 +21,20 @@ public class PlayerMovement : MonoBehaviour
 	[Header("Ground Check")]
 	public float GroundDrag;
 	public LayerMask GroundMask;
-	public bool IsGrounded;
+	private bool isGrounded;
 
 	[Header("import stuff")]
 	public Transform Player;
-	public Rigidbody RigidBody;
+	private Rigidbody rigidBody;
 	public Camera Camera;
 	private float horizontalInput;
 	private float verticalInput;
 
 	private void Awake()
 	{
-		RigidBody = GetComponent<Rigidbody>();
-		RigidBody.freezeRotation = true;
+		rigidBody = GetComponent<Rigidbody>();
+		rigidBody.freezeRotation = true;
+		currentState = StateEnum.Idle;
 	}
 
 	private void Update()
@@ -42,16 +48,34 @@ public class PlayerMovement : MonoBehaviour
 	{
 		MovePlayer();
 		RotatePlayer();
+		CheckState();
+	}
+
+	private void CheckState()
+	{
+		switch (currentState)
+		{
+			case StateEnum.Idle: Idle(); break;
+			case StateEnum.Walk: MovePlayer(); break;
+			case StateEnum.Crouch: CrouchingPlayer(); break;
+			case StateEnum.Jump: Jump(); break;
+			case StateEnum.Sprint: Sprinting(); break;
+		}
 	}
 
 	private void OnTriggerStay(Collider other)
 	{
-		IsGrounded = true;
+		isGrounded = true;
 	}
 
 	private void OnTriggerExit(Collider other)
 	{
-		IsGrounded = false;
+		isGrounded = false;
+	}
+
+	private void Idle()
+	{
+		currentState = StateEnum.Walk;
 	}
 
 	private void KeyInput()
@@ -59,21 +83,31 @@ public class PlayerMovement : MonoBehaviour
 		horizontalInput = Input.GetAxisRaw("Horizontal");
 		verticalInput = Input.GetAxisRaw("Vertical");
 
-		if (Input.GetKey(KeyCode.Space) && IsGrounded)
+		if (Input.GetKey(KeyCode.Space) && isGrounded)
 		{
-			Jump();		
+			currentState = StateEnum.Jump;
+		}
+
+		if (Input.GetKey(KeyCode.LeftShift))
+		{
+			currentState = StateEnum.Sprint;
+		}
+
+		if (Input.GetKey(KeyCode.LeftControl))
+		{
+			currentState = StateEnum.Crouch;
 		}
 	}
 
 	private void GroundCheck()
 	{
-		if (IsGrounded)
+		if (isGrounded)
 		{
-			RigidBody.drag = GroundDrag;
+			rigidBody.drag = GroundDrag;
 		}
-		if (!IsGrounded)
+		if (!isGrounded)
 		{
-			RigidBody.drag = 0;
+			rigidBody.drag = 0;
 		}
 	}
 
@@ -95,29 +129,36 @@ public class PlayerMovement : MonoBehaviour
 
     private void MovePlayer()
 	{
-		if (IsGrounded)
-		{
-			if (horizontalInput > 0) { transform.Translate(Vector3.right * Time.deltaTime * MoveSpeed, Space.World); }
-            if (horizontalInput < 0) { transform.Translate(Vector3.left * Time.deltaTime * MoveSpeed, Space.World); }
-            if (verticalInput > 0) { transform.Translate(Vector3.forward * Time.deltaTime * MoveSpeed, Space.World); }
-            if (verticalInput < 0) { transform.Translate(Vector3.back * Time.deltaTime * MoveSpeed, Space.World); }
-        }
+		if (horizontalInput > 0) { transform.Translate(Vector3.right * Time.deltaTime * MoveSpeed, Space.World); }
+		if (horizontalInput < 0) { transform.Translate(Vector3.left * Time.deltaTime * MoveSpeed, Space.World); }
+		if (verticalInput > 0) { transform.Translate(Vector3.forward * Time.deltaTime * MoveSpeed, Space.World); }
+		if (verticalInput < 0) { transform.Translate(Vector3.back * Time.deltaTime * MoveSpeed, Space.World); }
+	}
+
+	private void CrouchingPlayer()
+	{
+
 	}
 
 	private void SpeedControl()
 	{
-		Vector3 flatVel = new Vector3(RigidBody.velocity.x, 0f, RigidBody.velocity.z);
+		Vector3 flatVel = new Vector3(rigidBody.velocity.x, 0f, rigidBody.velocity.z);
 		if (flatVel.magnitude > MoveSpeed)
 		{
 			Vector3 limiedVel = flatVel.normalized * MoveSpeed;
-			RigidBody.velocity = new Vector3(limiedVel.x, RigidBody.velocity.y, limiedVel.z);
+			rigidBody.velocity = new Vector3(limiedVel.x, rigidBody.velocity.y, limiedVel.z);
 		}
 	}
 
 	private void Jump()
 	{
-		RigidBody.velocity = new Vector3(RigidBody.velocity.x, 0f, RigidBody.velocity.z);
-		RigidBody.AddForce(transform.up * JumpForce, ForceMode.Impulse);
+		rigidBody.velocity = new Vector3(rigidBody.velocity.x, 0f, rigidBody.velocity.z);
+		rigidBody.AddForce(transform.up * JumpForce, ForceMode.Impulse);
+	}
+
+	private void Sprinting()
+	{
+
 	}
 }
 	
