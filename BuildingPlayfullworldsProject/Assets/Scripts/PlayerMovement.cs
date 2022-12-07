@@ -9,9 +9,10 @@ public class PlayerMovement : MonoBehaviour
 	public StateEnum currentState;
 
 	[Header("Movement")]
-	public float MoveSpeed;
+	public float CurrentSpeed;
+	public float WalkSpeed;
 	public float SprintSpeed;
-	public float CroachSpeed;
+	public float CrouchSpeed;
 
 	[Header("Jumping")]
 	public float JumpForce;
@@ -88,15 +89,28 @@ public class PlayerMovement : MonoBehaviour
 			currentState = StateEnum.Jump;
 		}
 
-		if (Input.GetKey(KeyCode.LeftShift))
+		if (Input.GetKeyDown(KeyCode.LeftShift))
 		{
 			currentState = StateEnum.Sprint;
+		} 
+		else if (Input.GetKeyUp(KeyCode.LeftShift))
+		{
+			currentState = StateEnum.Walk;
 		}
 
-		if (Input.GetKey(KeyCode.LeftControl))
+		if (Input.GetKeyDown(KeyCode.LeftControl))
 		{
 			currentState = StateEnum.Crouch;
 		}
+		else if (Input.GetKeyUp(KeyCode.LeftControl))
+		{
+			currentState = StateEnum.Walk;
+		}
+
+		/*if (horizontalInput != 0 || horizontalInput != 0 || verticalInput != 0 || verticalInput != 0)
+		{
+			currentState = StateEnum.Walk;
+		}*/
 	}
 
 	private void GroundCheck()
@@ -127,38 +141,50 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void MovePlayer()
+	private void SpeedControl()
 	{
-		if (horizontalInput > 0) { transform.Translate(Vector3.right * Time.deltaTime * MoveSpeed, Space.World); }
-		if (horizontalInput < 0) { transform.Translate(Vector3.left * Time.deltaTime * MoveSpeed, Space.World); }
-		if (verticalInput > 0) { transform.Translate(Vector3.forward * Time.deltaTime * MoveSpeed, Space.World); }
-		if (verticalInput < 0) { transform.Translate(Vector3.back * Time.deltaTime * MoveSpeed, Space.World); }
+		Vector3 flatVel = new Vector3(rigidBody.velocity.x, 0f, rigidBody.velocity.z);
+		if (flatVel.magnitude > CurrentSpeed)
+		{
+			Vector3 limiedVel = flatVel.normalized * CurrentSpeed;
+			rigidBody.velocity = new Vector3(limiedVel.x, rigidBody.velocity.y, limiedVel.z);
+		}
+	}
+
+	//===========================================
+
+	private void MovePlayer()
+	{
+		CurrentSpeed = WalkSpeed;
+		if (horizontalInput > 0) { transform.Translate(Vector3.right * Time.deltaTime * CurrentSpeed, Space.World); }
+		if (horizontalInput < 0) { transform.Translate(Vector3.left * Time.deltaTime * CurrentSpeed, Space.World); }
+		if (verticalInput > 0) { transform.Translate(Vector3.forward * Time.deltaTime * CurrentSpeed, Space.World); }
+		if (verticalInput < 0) { transform.Translate(Vector3.back * Time.deltaTime * CurrentSpeed, Space.World); }
 	}
 
 	private void CrouchingPlayer()
 	{
-
-	}
-
-	private void SpeedControl()
-	{
-		Vector3 flatVel = new Vector3(rigidBody.velocity.x, 0f, rigidBody.velocity.z);
-		if (flatVel.magnitude > MoveSpeed)
-		{
-			Vector3 limiedVel = flatVel.normalized * MoveSpeed;
-			rigidBody.velocity = new Vector3(limiedVel.x, rigidBody.velocity.y, limiedVel.z);
-		}
+		CurrentSpeed = CrouchSpeed;
+		if (horizontalInput > 0) { transform.Translate(Vector3.right * Time.deltaTime * CurrentSpeed, Space.World); }
+		if (horizontalInput < 0) { transform.Translate(Vector3.left * Time.deltaTime * CurrentSpeed, Space.World); }
+		if (verticalInput > 0) { transform.Translate(Vector3.forward * Time.deltaTime * CurrentSpeed, Space.World); }
+		if (verticalInput < 0) { transform.Translate(Vector3.back * Time.deltaTime * CurrentSpeed, Space.World); }
 	}
 
 	private void Jump()
 	{
 		rigidBody.velocity = new Vector3(rigidBody.velocity.x, 0f, rigidBody.velocity.z);
 		rigidBody.AddForce(transform.up * JumpForce, ForceMode.Impulse);
+		currentState = StateEnum.Walk;
 	}
 
 	private void Sprinting()
 	{
-
+		CurrentSpeed = SprintSpeed;
+		if (horizontalInput > 0) { transform.Translate(Vector3.right * Time.deltaTime * CurrentSpeed, Space.World); }
+		if (horizontalInput < 0) { transform.Translate(Vector3.left * Time.deltaTime * CurrentSpeed, Space.World); }
+		if (verticalInput > 0) { transform.Translate(Vector3.forward * Time.deltaTime * CurrentSpeed, Space.World); }
+		if (verticalInput < 0) { transform.Translate(Vector3.back * Time.deltaTime * CurrentSpeed, Space.World); }
 	}
 }
 	
