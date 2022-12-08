@@ -50,7 +50,7 @@ public class Enemy : MonoBehaviour
 
 	private void PatrolBehaviour()
 	{
-		if (navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance)
+        if (navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance)
 		{
 			patrolIndex++;
 			if (patrolIndex < patrolPoints.Length)
@@ -66,20 +66,21 @@ public class Enemy : MonoBehaviour
 
 		if (Vector3.Distance(transform.position, Player.transform.position) < viewDistance*2)
 		{
-			DetectPointsLibrary.transform.position = navMeshAgent.transform.position;
-			detectIndex = -1;
-			currentState = StateEnum.Detect;
+            currentState = StateEnum.Detect;
+			detectIndex = 0;
 		}
 
 		if (Vector3.Distance(transform.position, Player.transform.position) < viewDistance)
 		{
-			currentState = StateEnum.Attack;
+			currentState = StateEnum.Detect;
 		}
 	}
 
 	private void DetectBehaviour()
 	{
-		if (navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance)
+        DetectPointsLibrary.transform.position = navMeshAgent.transform.position;
+
+        if (navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance)
 		{
 			detectIndex++;
 			if (detectIndex < detectPoints.Length)
@@ -100,7 +101,7 @@ public class Enemy : MonoBehaviour
 
 		if (Vector3.Distance(transform.position, Player.transform.position) > viewDistance/2)
 		{
-			patrolIndex = -1;
+			patrolIndex = 0;
 			currentState = StateEnum.Patrol;
 		}
 	}
