@@ -1,6 +1,5 @@
 using UnityEngine;
 
-public class PatrolPoints : MonoBehaviour
-{
-	
+public class PatrolPoints : MonoBehaviour 
+{ 
 }

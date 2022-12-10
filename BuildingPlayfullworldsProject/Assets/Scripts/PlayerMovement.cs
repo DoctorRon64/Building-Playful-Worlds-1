@@ -37,7 +37,6 @@ public class PlayerMovement : MonoBehaviour
 		rigidBody.freezeRotation = true;
 		currentState = StateEnum.Idle;
 	}
-
 	private void Update()
 	{
 		GroundCheck();
@@ -102,15 +101,11 @@ public class PlayerMovement : MonoBehaviour
 		{
 			currentState = StateEnum.Crouch;
 		}
+
 		else if (Input.GetKeyUp(KeyCode.LeftControl))
 		{
 			currentState = StateEnum.Walk;
 		}
-
-		/*if (horizontalInput != 0 || horizontalInput != 0 || verticalInput != 0 || verticalInput != 0)
-		{
-			currentState = StateEnum.Walk;
-		}*/
 	}
 
 	private void GroundCheck()
