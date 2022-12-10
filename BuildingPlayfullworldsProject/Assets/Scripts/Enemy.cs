@@ -5,26 +5,24 @@ using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
-    public enum StateEnum { Patrol, Detect, Attack }
+    public enum StateEnum { Idle, Patrol, Attack }
     public StateEnum currentState;
     public float ViewDistance = 5;
+	public float CooldownTimer;
+	public float CooldownStartTime;
 
 	[Header("NavMeshAgent")]
     public NavMeshAgent NavMeshAgent;
     private PatrolPoints[] patrolPoints;
-    private DetectPoints[] detectPoints;
     public int patrolIndex = 0;
-    public int detectIndex = 0;
 
 	[Header("Reference Object")]
 	public GameObject Player;
-	public GameObject DetectPointsLibrary;
 
 	private void Awake()
 	{
         NavMeshAgent = GetComponent<NavMeshAgent>();
 		patrolPoints = FindObjectsOfType<PatrolPoints>();
-		detectPoints = FindObjectsOfType<DetectPoints>();
 	}
 
 	private void Start()
@@ -44,11 +42,29 @@ public class Enemy : MonoBehaviour
 	{
         switch (currentState)
 		{
-            case StateEnum.Patrol: PatrolBehaviour(); break;
-            case StateEnum.Detect: DetectBehaviour(); break;
+			case StateEnum.Idle: IdleBehaviour(); break;
+			case StateEnum.Patrol: PatrolBehaviour(); break;
 			case StateEnum.Attack: AttackBehaviour(); break;
    		}
 	}
+
+	private void IdleBehaviour()
+	{
+		if (Vector3.Distance(transform.position, Player.transform.position) < ViewDistance)
+		{
+			currentState = StateEnum.Attack;
+		}
+
+		CooldownTimer = CooldownStartTime;
+		CooldownTimer -= 1000 * Time.deltaTime;
+		if (CooldownTimer <= 0)
+		{
+			NavMeshAgent.SetDestination(patrolPoints[patrolIndex].transform.position);
+			currentState = StateEnum.Patrol;
+		}
+
+	}
+
 	private void PatrolBehaviour()
 	{
         if (NavMeshAgent.remainingDistance <= NavMeshAgent.stoppingDistance)
@@ -56,41 +72,12 @@ public class Enemy : MonoBehaviour
 			patrolIndex++;
 			if (patrolIndex < patrolPoints.Length)
 			{
-				NavMeshAgent.SetDestination(patrolPoints[patrolIndex].transform.position);
+				currentState = StateEnum.Idle;
 			}
 
 			if (patrolIndex >= patrolPoints.Length)
 			{
-				patrolIndex = 0;
-			}
-		}
-
-		if (Vector3.Distance(transform.position, Player.transform.position) < ViewDistance*2)
-		{
-			DetectPointsLibrary.transform.position = NavMeshAgent.transform.position;
-			currentState = StateEnum.Detect;
-			detectIndex = 0;
-		}
-
-		if (Vector3.Distance(transform.position, Player.transform.position) < ViewDistance)
-		{
-			currentState = StateEnum.Detect;
-		}
-	}
-
-	private void DetectBehaviour()
-	{
-        if (NavMeshAgent.remainingDistance <= NavMeshAgent.stoppingDistance)
-		{
-			detectIndex++;
-			if (detectIndex < detectPoints.Length)
-			{
-				NavMeshAgent.SetDestination(detectPoints[detectIndex].transform.position);
-			}
-
-			if (detectIndex >= detectPoints.Length)
-			{
-				detectIndex = 0;
+				patrolIndex = -1;
 			}
 		}
 
@@ -98,19 +85,13 @@ public class Enemy : MonoBehaviour
 		{
 			currentState = StateEnum.Attack;
 		}
-
-		if (Vector3.Distance(transform.position, Player.transform.position) > ViewDistance/2)
-		{
-			patrolIndex = 0;
-			currentState = StateEnum.Patrol;
-		}
 	}
 
 	private void AttackBehaviour()
 	{
 		NavMeshAgent.SetDestination(Player.transform.position);
 
-		if (Vector3.Distance(transform.position, Player.transform.position) > ViewDistance)
+		if (Vector3.Distance(transform.position, Player.transform.position) > ViewDistance*2)
 		{
 			currentState = StateEnum.Patrol;
 		}
