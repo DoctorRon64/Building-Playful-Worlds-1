@@ -9,7 +9,7 @@ public class PlayerMovement : MonoBehaviour
 	public StateEnum currentState;
 
 	[Header("Movement")]
-	public float CurrentSpeed;
+	private float currentSpeed;
 	public float WalkSpeed;
 	public float SprintSpeed;
 	public float CrouchSpeed;
@@ -20,6 +20,7 @@ public class PlayerMovement : MonoBehaviour
 	public float AirMultiplier;
 
 	[Header("Ground Check")]
+	public IsFeetOnGround IsFeetOnGround;
 	public float GroundDrag;
 	public LayerMask GroundMask;
 	private bool isGrounded;
@@ -51,7 +52,7 @@ public class PlayerMovement : MonoBehaviour
 		CheckState();
 	}
 
-	private void CheckState()
+    private void CheckState()
 	{
 		switch (currentState)
 		{
@@ -62,17 +63,6 @@ public class PlayerMovement : MonoBehaviour
 			case StateEnum.Sprint: Sprinting(); break;
 		}
 	}
-
-	private void OnTriggerStay(Collider other)
-	{
-		isGrounded = true;
-	}
-
-	private void OnTriggerExit(Collider other)
-	{
-		isGrounded = false;
-	}
-
 	private void Idle()
 	{
 		currentState = StateEnum.Walk;
@@ -108,19 +98,21 @@ public class PlayerMovement : MonoBehaviour
 		}
 	}
 
-	private void GroundCheck()
-	{
-		if (isGrounded)
-		{
-			rigidBody.drag = GroundDrag;
-		}
-		if (!isGrounded)
-		{
-			rigidBody.drag = 0;
-		}
-	}
+    private void GroundCheck()
+    {
+        isGrounded = IsFeetOnGround.OnGround;
 
-	private void RotatePlayer()
+        if (isGrounded)
+        {
+            rigidBody.drag = GroundDrag;
+        }
+        if (!isGrounded)
+        {
+            rigidBody.drag = 0;
+        }
+    }
+
+    private void RotatePlayer()
 	{
 		RaycastHit hit;
 		Ray ray = Camera.ScreenPointToRay(Input.mousePosition);
@@ -132,16 +124,15 @@ public class PlayerMovement : MonoBehaviour
 			transform.rotation = Quaternion.LookRotation(lookAt);*/
             transform.LookAt(hit.point);
 			transform.rotation = Quaternion.Euler(new Vector3(0, transform.rotation.eulerAngles.y, 0));
-
         }
     }
 
 	private void SpeedControl()
 	{
 		Vector3 flatVel = new Vector3(rigidBody.velocity.x, 0f, rigidBody.velocity.z);
-		if (flatVel.magnitude > CurrentSpeed)
+		if (flatVel.magnitude > currentSpeed)
 		{
-			Vector3 limiedVel = flatVel.normalized * CurrentSpeed;
+			Vector3 limiedVel = flatVel.normalized * currentSpeed;
 			rigidBody.velocity = new Vector3(limiedVel.x, rigidBody.velocity.y, limiedVel.z);
 		}
 	}
@@ -150,20 +141,20 @@ public class PlayerMovement : MonoBehaviour
 
 	private void MovePlayer()
 	{
-		CurrentSpeed = WalkSpeed;
-		if (horizontalInput > 0) { transform.Translate(Vector3.right * Time.deltaTime * CurrentSpeed, Space.World); }
-		if (horizontalInput < 0) { transform.Translate(Vector3.left * Time.deltaTime * CurrentSpeed, Space.World); }
-		if (verticalInput > 0) { transform.Translate(Vector3.forward * Time.deltaTime * CurrentSpeed, Space.World); }
-		if (verticalInput < 0) { transform.Translate(Vector3.back * Time.deltaTime * CurrentSpeed, Space.World); }
+		currentSpeed = WalkSpeed;
+		if (horizontalInput > 0) { transform.Translate(Vector3.right * Time.deltaTime * currentSpeed, Space.World); }
+		if (horizontalInput < 0) { transform.Translate(Vector3.left * Time.deltaTime * currentSpeed, Space.World); }
+		if (verticalInput > 0) { transform.Translate(Vector3.forward * Time.deltaTime * currentSpeed, Space.World); }
+		if (verticalInput < 0) { transform.Translate(Vector3.back * Time.deltaTime * currentSpeed, Space.World); }
 	}
 
 	private void CrouchingPlayer()
 	{
-		CurrentSpeed = CrouchSpeed;
-		if (horizontalInput > 0) { transform.Translate(Vector3.right * Time.deltaTime * CurrentSpeed, Space.World); }
-		if (horizontalInput < 0) { transform.Translate(Vector3.left * Time.deltaTime * CurrentSpeed, Space.World); }
-		if (verticalInput > 0) { transform.Translate(Vector3.forward * Time.deltaTime * CurrentSpeed, Space.World); }
-		if (verticalInput < 0) { transform.Translate(Vector3.back * Time.deltaTime * CurrentSpeed, Space.World); }
+		currentSpeed = CrouchSpeed;
+		if (horizontalInput > 0) { transform.Translate(Vector3.right * Time.deltaTime * currentSpeed, Space.World); }
+		if (horizontalInput < 0) { transform.Translate(Vector3.left * Time.deltaTime * currentSpeed, Space.World); }
+		if (verticalInput > 0) { transform.Translate(Vector3.forward * Time.deltaTime * currentSpeed, Space.World); }
+		if (verticalInput < 0) { transform.Translate(Vector3.back * Time.deltaTime * currentSpeed, Space.World); }
 	}
 
 	private void Jump()
@@ -175,11 +166,11 @@ public class PlayerMovement : MonoBehaviour
 
 	private void Sprinting()
 	{
-		CurrentSpeed = SprintSpeed;
-		if (horizontalInput > 0) { transform.Translate(Vector3.right * Time.deltaTime * CurrentSpeed, Space.World); }
-		if (horizontalInput < 0) { transform.Translate(Vector3.left * Time.deltaTime * CurrentSpeed, Space.World); }
-		if (verticalInput > 0) { transform.Translate(Vector3.forward * Time.deltaTime * CurrentSpeed, Space.World); }
-		if (verticalInput < 0) { transform.Translate(Vector3.back * Time.deltaTime * CurrentSpeed, Space.World); }
+		currentSpeed = SprintSpeed;
+		if (horizontalInput > 0) { transform.Translate(Vector3.right * Time.deltaTime * currentSpeed, Space.World); }
+		if (horizontalInput < 0) { transform.Translate(Vector3.left * Time.deltaTime * currentSpeed, Space.World); }
+		if (verticalInput > 0) { transform.Translate(Vector3.forward * Time.deltaTime * currentSpeed, Space.World); }
+		if (verticalInput < 0) { transform.Translate(Vector3.back * Time.deltaTime * currentSpeed, Space.World); }
 	}
 }
 	

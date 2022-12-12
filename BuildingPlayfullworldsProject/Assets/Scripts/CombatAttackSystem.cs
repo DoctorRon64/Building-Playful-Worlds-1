@@ -5,53 +5,40 @@ using UnityEngine;
 public class CombatAttackSystem : MonoBehaviour
 {
 	public float HitCooldownValue;
-    public float HitCooldown = 2;
+    public float HitCooldown;
     public int AttackDamage;
 	public Animator AnimatorController;
-	public GameObject SwordModel;
-
-	private void Awake()
-	{
-		SwordModel.SetActive(false);
-	}
 
 	public void Update()
 	{
 		InputSystem();
-
-		if (HitCooldownValue > 0)
-		{
-			Invoke("TickingTimer", 1);
-		}
 	}
 
 	private void TickingTimer()
 	{
-		HitCooldownValue -= 1;
+		if (HitCooldown > 0)
+		{
+			HitCooldown -= Time.deltaTime;
+		}
 	}
 
 	private void InputSystem()
 	{
 		if (Input.GetKey(KeyCode.E))
 		{
-			if (HitCooldownValue <= 0)
+            if (HitCooldownValue < 0)
 			{
 				Attack();
-			}
+                HitCooldown = HitCooldownValue;
+				TickingTimer();
+            }
 		}
 	}
 
-    private void Attack()
+	private void Attack()
 	{
-		HitCooldownValue += HitCooldown;
-		SwordModel.SetActive(true);
-		AnimatorController.Play(" ");
-		Invoke("ResetAttack", HitCooldown);
+		Debug.Log("hitted");
+		//AnimatorController.Play(" ");
 	}
-
-	private void ResetAttack()
-	{
-        SwordModel.SetActive(false);
-    }
 
 }
