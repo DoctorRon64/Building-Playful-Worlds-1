@@ -18,11 +18,13 @@ public class Enemy : MonoBehaviour
 
 	[Header("Reference Object")]
 	public GameObject Player;
+	private Animator anim;
 
 	private void Awake()
 	{
         NavMeshAgent = GetComponent<NavMeshAgent>();
 		patrolPoints = FindObjectsOfType<PatrolPoints>();
+		anim = GetComponent<Animator>();
 	}
 
 	private void Start()
@@ -50,6 +52,7 @@ public class Enemy : MonoBehaviour
 
 	private void IdleBehaviour()
 	{
+		anim.SetInteger("EnemyState", 0);
 		if (Vector3.Distance(transform.position, Player.transform.position) < ViewDistance)
 		{
 			currentState = StateEnum.Attack;
@@ -67,7 +70,8 @@ public class Enemy : MonoBehaviour
 
 	private void PatrolBehaviour()
 	{
-        if (NavMeshAgent.remainingDistance <= NavMeshAgent.stoppingDistance)
+		anim.SetInteger("EnemyState", 1);
+		if (NavMeshAgent.remainingDistance <= NavMeshAgent.stoppingDistance)
 		{
 			patrolIndex++;
 			if (patrolIndex < patrolPoints.Length)
@@ -89,6 +93,7 @@ public class Enemy : MonoBehaviour
 
 	private void AttackBehaviour()
 	{
+		anim.SetInteger("EnemyState", 2);
 		NavMeshAgent.SetDestination(Player.transform.position);
 
 		if (Vector3.Distance(transform.position, Player.transform.position) > ViewDistance*2)

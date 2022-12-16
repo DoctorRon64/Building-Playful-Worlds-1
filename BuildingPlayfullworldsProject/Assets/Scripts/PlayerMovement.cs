@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-	public enum StateEnum { Idle, Walk, Crouch, Sprint, Jump, Attack }
+	public enum StateEnum { Idle, Walk, Sprint, Attack }
 	public StateEnum currentState;
 
 	[Header("Movement")]
@@ -23,15 +23,15 @@ public class PlayerMovement : MonoBehaviour
 	public IsFeetOnGround IsFeetOnGround;
 	public float GroundDrag;
 	public LayerMask GroundMask;
-	private bool isGrounded;
+	public bool isGrounded;
 
 	[Header("import stuff")]
 	public Transform Player;
 	public Camera Camera;
 	private Rigidbody rigidBody;
 	private Animator anim;
-	public float horizontalInput;
-	public float verticalInput;
+	private float horizontalInput;
+	private float verticalInput;
 
 	private void Awake()
 	{
@@ -60,56 +60,32 @@ public class PlayerMovement : MonoBehaviour
 		{
 			case StateEnum.Idle: Idle(); break;
 			case StateEnum.Walk: NormalWalk(); break;
-			case StateEnum.Crouch: CrouchingPlayer(); break;
 			case StateEnum.Sprint: Sprinting(); break;
-			case StateEnum.Jump: Jump(); break;
 			case StateEnum.Attack: AttackWithSword(); break;
 		}
 	}
 	private void Idle()
 	{
 		anim.SetInteger("PlayerState", 0);
-		if (horizontalInput != 0 || verticalInput != 0)
-		{
-			currentState = StateEnum.Walk;
-		}
-
-		if (Input.GetKey(KeyCode.Space) && isGrounded)
-		{
-			currentState = StateEnum.Jump;
-		}
-
-		if (Input.GetKeyDown(KeyCode.LeftShift))
-		{
-			currentState = StateEnum.Sprint;
-		}
-		else if (Input.GetKeyUp(KeyCode.LeftShift))
-		{
-			currentState = StateEnum.Idle;
-		} 
-
-		if (Input.GetKeyDown(KeyCode.LeftControl))
-		{
-			currentState = StateEnum.Crouch;
-		}
-		else if (Input.GetKeyUp(KeyCode.LeftControl))
-		{
-			currentState = StateEnum.Idle;
-		}
-
-		if (Input.GetKey(KeyCode.E))
-		{
-			currentState = StateEnum.Attack;
-		}
 	}
 
 	private void KeyInput()
 	{
 		horizontalInput = Input.GetAxisRaw("Horizontal");
 		verticalInput = Input.GetAxisRaw("Vertical");
+
+		if (Input.GetKey(KeyCode.E))
+		{
+			currentState = StateEnum.Attack;
+		}
+
+		if (verticalInput != 0 && currentState == StateEnum.Idle)
+		{
+			currentState = StateEnum.Walk;
+		}
 	}
 
-    private void GroundCheck()
+	private void GroundCheck()
     {
         isGrounded = IsFeetOnGround.OnGround;
 
@@ -147,29 +123,39 @@ public class PlayerMovement : MonoBehaviour
 
 	private void MovePlayer()
 	{
-		if (horizontalInput > 0) { transform.Translate(Vector3.right * Time.deltaTime * currentSpeed, Space.World); }
-		if (horizontalInput < 0) { transform.Translate(Vector3.left * Time.deltaTime * currentSpeed, Space.World); }
-		if (verticalInput > 0) { transform.Translate(Vector3.forward * Time.deltaTime * currentSpeed, Space.World); }
-		if (verticalInput < 0) { transform.Translate(Vector3.back * Time.deltaTime * currentSpeed, Space.World); }
+		if (verticalInput > 0) { transform.Translate(Vector3.forward * Time.deltaTime * currentSpeed); }
+		if (verticalInput < 0) { transform.Translate(Vector3.back * Time.deltaTime * currentSpeed); }
 	}
 
 	private void NormalWalk()
 	{
 		anim.SetInteger("PlayerState", 1);
-		currentSpeed = WalkSpeed;
-		MovePlayer();
+
+		if (Input.GetKeyDown(KeyCode.LeftShift))
+		{
+			currentState = StateEnum.Sprint;
+		}
+
 		if (horizontalInput == 0 && verticalInput == 0)
 		{
 			currentState = StateEnum.Idle;
 		}
+
+		currentSpeed = WalkSpeed;
+		MovePlayer();
 	}
 
-	private void CrouchingPlayer()
+	/*private void CrouchingPlayer()
 	{
 		anim.SetInteger("PlayerState", 2);
 		currentSpeed = CrouchSpeed;
 		MovePlayer();
-	}
+
+		if (Input.GetKeyUp(KeyCode.LeftControl))
+		{
+			currentState = StateEnum.Walk;
+		}
+	}*/
 
 	private void Sprinting()
 	{
@@ -177,16 +163,30 @@ public class PlayerMovement : MonoBehaviour
 		currentSpeed = SprintSpeed;
 		MovePlayer();
 
-		
+		if (Input.GetKeyUp(KeyCode.LeftShift))
+		{
+			currentState = StateEnum.Walk;
+		}
+
+		if (horizontalInput == 0 && verticalInput == 0)
+		{
+			currentState = StateEnum.Idle;
+		}
 	}
 
-	private void Jump()
+	/*private void Jump()
 	{
 		anim.SetInteger("PlayerState", 4);
 		rigidBody.velocity = new Vector3(rigidBody.velocity.x, 0f, rigidBody.velocity.z);
 		rigidBody.AddForce(transform.up * JumpForce, ForceMode.Impulse);
-		currentState = StateEnum.Idle;
-	}
+		
+
+		if (isGrounded != true)
+		{
+			Debug.Log("hii");
+			currentState = StateEnum.Idle;
+		}
+	}*/
 	
 
 	private void AttackWithSword()
