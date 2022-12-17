@@ -101,4 +101,9 @@ public class Enemy : MonoBehaviour
 			currentState = StateEnum.Patrol;
 		}
 	}
+
+	private void OnCollisionEnter(Collision collision)
+	{
+		
+	}
 }
