@@ -1130,6 +1130,7 @@ GameObject:
   - component: {fileID: 384226570479047289}
   - component: {fileID: 384226570481100151}
   - component: {fileID: 384226570480126697}
+  - component: {fileID: 384226570481100152}
   m_Layer: 0
   m_Name: Sword
   m_TagString: Untagged
@@ -1382,6 +1383,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!65 &384226570481100152
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 384226570477870211}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.0728942, y: 0.07677619, z: 0.7097525}
+  m_Center: {x: -0.0008090887, y: 0.0017566273, z: 0.12725511}
 --- !u!65 &384226570484276991
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1542,7 +1556,6 @@ GameObject:
   - component: {fileID: 919132149025746687}
   - component: {fileID: 919132149025746686}
   - component: {fileID: 919132149025746685}
-  - component: {fileID: 919132149025746688}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -1593,6 +1606,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentState: 0
+  Health: 0
+  DamageDealing: 0
   WalkSpeed: 4
   SprintSpeed: 6
   CrouchSpeed: 2
@@ -1604,83 +1619,8 @@ MonoBehaviour:
   GroundMask:
     serializedVersion: 2
     m_Bits: 0
-  isGrounded: 0
-  Player: {fileID: 0}
+  Player: {fileID: 543450652762862662}
   Camera: {fileID: 1486997809}
---- !u!114 &919132149025746688
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 919132149025746684}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2d8418b0b9634b1892b0268dd9c2743, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  boneShape: 1
-  drawBones: 1
-  drawTripods: 0
-  boneSize: 1
-  tripodSize: 1
-  boneColor: {r: 0, g: 0, b: 1, a: 0.5}
-  m_Transforms:
-  - {fileID: 366175168662553538}
-  - {fileID: 2420202491026510681}
-  - {fileID: 6515712193459638207}
-  - {fileID: 7078722787569576496}
-  - {fileID: 5742672707982878529}
-  - {fileID: 1202371032195527593}
-  - {fileID: 5465940247456781522}
-  - {fileID: 2559285841027083694}
-  - {fileID: 8169382869073896429}
-  - {fileID: 6000407479348808872}
-  - {fileID: 2563496968957421061}
-  - {fileID: 5790970487340941461}
-  - {fileID: 7410462538157862228}
-  - {fileID: 2348787447585918364}
-  - {fileID: 6452705232274203395}
-  - {fileID: 7151331951232660848}
-  - {fileID: 608321762412574161}
-  - {fileID: 2916570863223178501}
-  - {fileID: 5477181764851539319}
-  - {fileID: 6502182838953936494}
-  - {fileID: 1330755669766395969}
-  - {fileID: 8255111156907123781}
-  - {fileID: 4747904709681190440}
-  - {fileID: 6629111072746652658}
-  - {fileID: 5048025440670851067}
-  - {fileID: 1852576807215492197}
-  - {fileID: 8153021305815225611}
-  - {fileID: 3667946886742409286}
-  - {fileID: 1189529853399243717}
-  - {fileID: 9118793900195067041}
-  - {fileID: 8447082966135408467}
-  - {fileID: 5901452234862323397}
-  - {fileID: 8700783698812625451}
-  - {fileID: 3183749884706731440}
-  - {fileID: 7934756007249472659}
-  - {fileID: 6833846119644744071}
-  - {fileID: 7666680084157923301}
-  - {fileID: 7358631407590133142}
-  - {fileID: 1564860332861017502}
-  - {fileID: 3558328721084433686}
-  - {fileID: 6655383506300120090}
-  - {fileID: 1155344850301828833}
-  - {fileID: 2365583844121277047}
-  - {fileID: 1031632034945404443}
-  - {fileID: 8352548718672243504}
-  - {fileID: 2003599736716829367}
-  - {fileID: 3199222090657901239}
-  - {fileID: 822416213320676228}
-  - {fileID: 6341119542065745057}
-  - {fileID: 3742394135580486566}
-  - {fileID: 5097370190181898479}
-  - {fileID: 6323950002372129577}
-  - {fileID: 1092408308453939448}
-  - {fileID: 5372056943697849585}
-  - {fileID: 2455146755894689221}
 --- !u!4 &1031632034945404443
 Transform:
   m_ObjectHideFlags: 0

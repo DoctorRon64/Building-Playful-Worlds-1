@@ -8,6 +8,10 @@ public class PlayerMovement : MonoBehaviour
 	public enum StateEnum { Idle, Walk, Sprint, Attack }
 	public StateEnum currentState;
 
+	[Header("Combat")]
+	public int Health;
+	public int DamageDealing;
+
 	[Header("Movement")]
 	private float currentSpeed;
 	public float WalkSpeed;
@@ -23,7 +27,7 @@ public class PlayerMovement : MonoBehaviour
 	public IsFeetOnGround IsFeetOnGround;
 	public float GroundDrag;
 	public LayerMask GroundMask;
-	public bool isGrounded;
+	private bool isGrounded;
 
 	[Header("import stuff")]
 	public Transform Player;
