@@ -20,6 +20,8 @@ public class Enemy : MonoBehaviour
 	public GameObject Player;
 	private Animator anim;
 
+	public float Health;
+
 	private void Awake()
 	{
         NavMeshAgent = GetComponent<NavMeshAgent>();
@@ -38,6 +40,7 @@ public class Enemy : MonoBehaviour
 	private void Update()
 	{
         CheckState();
+		IfHealthIsToLow();
 	}
 
 	private void CheckState()
@@ -102,8 +105,19 @@ public class Enemy : MonoBehaviour
 		}
 	}
 
-	private void OnCollisionEnter(Collision collision)
+	private void OnTriggerEnter(Collider collision)
 	{
-		
+		if (collision.CompareTag("Sword"))
+		{
+			Health -= FindObjectOfType<PlayerMovement>().DamageDealing;
+		}
+	}
+
+	private void IfHealthIsToLow()
+	{
+		if (Health < 0)
+		{
+			Destroy(this);
+		}
 	}
 }

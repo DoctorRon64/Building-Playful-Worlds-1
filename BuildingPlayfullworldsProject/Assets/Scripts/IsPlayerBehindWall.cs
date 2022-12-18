@@ -11,10 +11,9 @@ public class IsPlayerBehindWall : MonoBehaviour
     public Material SeeTroughMaterial;
     public float LookingRadius;
 
-
-    // Update is called once per frame
-    void Update()
+	private void Update()
     {
+        
         if (Physics.CapsuleCast(cam.transform.position, player.transform.position, LookingRadius, transform.forward))
         {
             model.GetComponent<Renderer>().material = PlayerMaterial;
@@ -23,5 +22,7 @@ public class IsPlayerBehindWall : MonoBehaviour
         {
             model.GetComponent<Renderer>().material = SeeTroughMaterial;
         }
+
+        Debug.DrawLine(cam.transform.position, player.transform.position, Color.black, 1);
     }
 }
