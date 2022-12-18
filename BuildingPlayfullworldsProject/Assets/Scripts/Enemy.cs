@@ -109,7 +109,11 @@ public class Enemy : MonoBehaviour
 	{
 		if (collision.CompareTag("Sword"))
 		{
-			Health -= FindObjectOfType<PlayerMovement>().DamageDealing;
+			if (Player.GetComponent<PlayerMovement>().AttackingEnemy == true) 
+			{
+				Health -= Player.GetComponent<PlayerMovement>().DamageDealing;
+			}
+			
 		}
 	}
 
@@ -117,7 +121,7 @@ public class Enemy : MonoBehaviour
 	{
 		if (Health < 0)
 		{
-			Destroy(this);
+			Destroy(gameObject);
 		}
 	}
 }

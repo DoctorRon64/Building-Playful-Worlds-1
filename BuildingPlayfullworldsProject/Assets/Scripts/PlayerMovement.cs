@@ -5,12 +5,13 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-	public enum StateEnum { Idle, Walk, Sprint, Attack }
+	public enum StateEnum { Idle, Walk, Sprint, Crouch, Attack }
 	public StateEnum currentState;
 
 	[Header("Combat")]
 	public int Health;
 	public int DamageDealing;
+	public bool AttackingEnemy;
 
 	[Header("Movement")]
 	private float currentSpeed;
@@ -43,19 +44,21 @@ public class PlayerMovement : MonoBehaviour
 		rigidBody.freezeRotation = true;
 		anim = GetComponent<Animator>();
 		currentState = StateEnum.Idle;
+		AttackingEnemy = false;
 	}
 	private void Update()
 	{
 		GroundCheck();
 		KeyInput();
 		SpeedControl();
+		CheckState();
 	}
 
 	private void FixedUpdate()
 	{
 		MovePlayer();
 		RotatePlayer();
-		CheckState();
+		
 	}
 
     private void CheckState()
@@ -65,12 +68,14 @@ public class PlayerMovement : MonoBehaviour
 			case StateEnum.Idle: Idle(); break;
 			case StateEnum.Walk: NormalWalk(); break;
 			case StateEnum.Sprint: Sprinting(); break;
+			case StateEnum.Crouch: CrouchingPlayer(); break;
 			case StateEnum.Attack: AttackWithSword(); break;
 		}
 	}
 	private void Idle()
 	{
 		anim.SetInteger("PlayerState", 0);
+		AttackingEnemy = false;
 	}
 
 	private void KeyInput()
@@ -140,6 +145,11 @@ public class PlayerMovement : MonoBehaviour
 			currentState = StateEnum.Sprint;
 		}
 
+		if (Input.GetKeyDown(KeyCode.LeftControl))
+		{
+			currentState = StateEnum.Crouch;
+		}
+
 		if (horizontalInput == 0 && verticalInput == 0)
 		{
 			currentState = StateEnum.Idle;
@@ -149,7 +159,7 @@ public class PlayerMovement : MonoBehaviour
 		MovePlayer();
 	}
 
-	/*private void CrouchingPlayer()
+	private void CrouchingPlayer()
 	{
 		anim.SetInteger("PlayerState", 2);
 		currentSpeed = CrouchSpeed;
@@ -159,7 +169,12 @@ public class PlayerMovement : MonoBehaviour
 		{
 			currentState = StateEnum.Walk;
 		}
-	}*/
+/*
+		if (horizontalInput == 0 && verticalInput == 0)
+		{
+			currentState = StateEnum.Idle;
+		}*/
+	}
 
 	private void Sprinting()
 	{
@@ -196,6 +211,7 @@ public class PlayerMovement : MonoBehaviour
 	private void AttackWithSword()
 	{
 		anim.SetInteger("PlayerState", 5);
+		AttackingEnemy = true;
 		currentState = StateEnum.Idle;
 	}
 }
