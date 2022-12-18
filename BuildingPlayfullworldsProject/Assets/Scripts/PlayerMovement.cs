@@ -58,7 +58,6 @@ public class PlayerMovement : MonoBehaviour
 	{
 		MovePlayer();
 		RotatePlayer();
-		
 	}
 
     private void CheckState()

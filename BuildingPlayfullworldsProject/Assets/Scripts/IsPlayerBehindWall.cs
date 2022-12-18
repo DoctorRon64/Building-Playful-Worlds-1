@@ -4,25 +4,31 @@ using UnityEngine;
 
 public class IsPlayerBehindWall : MonoBehaviour
 {
-    public GameObject cam;
-    public GameObject player;
-    public GameObject model;
+    public GameObject Camera;
+    public GameObject Target;
+    public GameObject Model;
     public Material PlayerMaterial;
     public Material SeeTroughMaterial;
-    public float LookingRadius;
+    public LayerMask PlayerMask;
 
 	private void Update()
     {
-        
-        if (Physics.CapsuleCast(cam.transform.position, player.transform.position, LookingRadius, transform.forward))
+        Ray ray = new Ray(Camera.transform.position, Target.transform.position - Camera.transform.position);
+
+        if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, PlayerMask))
         {
-            model.GetComponent<Renderer>().material = PlayerMaterial;
-        }
-        else
-        {
-            model.GetComponent<Renderer>().material = SeeTroughMaterial;
+            Debug.Log(hit.collider.name);
+            if (hit.collider.gameObject.CompareTag("Player"))
+            {
+                Model.GetComponent<Renderer>().material = PlayerMaterial;
+                
+            }
+            else
+            {
+                Model.GetComponent<Renderer>().material = SeeTroughMaterial;
+            }       
         }
 
-        Debug.DrawLine(cam.transform.position, player.transform.position, Color.black, 1);
+        Debug.DrawLine(Camera.transform.position, Target.transform.position, Color.black, 1);
     }
 }

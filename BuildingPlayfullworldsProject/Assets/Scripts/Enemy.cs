@@ -105,7 +105,7 @@ public class Enemy : MonoBehaviour
 		}
 	}
 
-	private void OnTriggerEnter(Collider collision)
+	private void OnTriggerExit(Collider collision)
 	{
 		if (collision.CompareTag("Sword"))
 		{
@@ -113,7 +113,6 @@ public class Enemy : MonoBehaviour
 			{
 				Health -= Player.GetComponent<PlayerMovement>().DamageDealing;
 			}
-			
 		}
 	}
 
