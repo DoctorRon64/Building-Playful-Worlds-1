@@ -17,7 +17,6 @@ public class IsPlayerBehindWall : MonoBehaviour
 
         if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, PlayerMask))
         {
-            Debug.Log(hit.collider.name);
             if (hit.collider.gameObject.CompareTag("Player"))
             {
                 Model.GetComponent<Renderer>().material = PlayerMaterial;

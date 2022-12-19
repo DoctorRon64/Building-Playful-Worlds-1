@@ -20,7 +20,9 @@ public class Enemy : MonoBehaviour
 	public GameObject Player;
 	private Animator anim;
 
+	[Header("Combat")]
 	public float Health;
+	public bool AttackingPlayer;
 
 	private void Awake()
 	{
@@ -55,7 +57,8 @@ public class Enemy : MonoBehaviour
 
 	private void IdleBehaviour()
 	{
-		anim.SetInteger("EnemyState", 0);
+		AttackingPlayer = false;
+        anim.SetInteger("EnemyState", 0);
 		if (Vector3.Distance(transform.position, Player.transform.position) < ViewDistance)
 		{
 			currentState = StateEnum.Attack;
@@ -73,6 +76,7 @@ public class Enemy : MonoBehaviour
 
 	private void PatrolBehaviour()
 	{
+		AttackingPlayer = false;
 		anim.SetInteger("EnemyState", 1);
 		if (NavMeshAgent.remainingDistance <= NavMeshAgent.stoppingDistance)
 		{
@@ -96,8 +100,10 @@ public class Enemy : MonoBehaviour
 
 	private void AttackBehaviour()
 	{
+        AttackingPlayer = true;
 		anim.SetInteger("EnemyState", 2);
 		NavMeshAgent.SetDestination(Player.transform.position);
+		NavMeshAgent.transform.rotation = Quaternion.LookRotation((Player.transform.position - transform.position).normalized);
 
 		if (Vector3.Distance(transform.position, Player.transform.position) > ViewDistance*2)
 		{

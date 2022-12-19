@@ -14,15 +14,17 @@ public class PlayerMovement : MonoBehaviour
 	public bool AttackingEnemy;
 
 	[Header("Movement")]
+	public CharacterController CharacterController;
 	private float currentSpeed;
 	public float WalkSpeed;
 	public float SprintSpeed;
 	public float CrouchSpeed;
+	public LayerMask CheckWallInfront;
 
-	[Header("Jumping")]
+	/*[Header("Jumping")]
 	public float JumpForce;
 	public float JumpCooldown;
-	public float AirMultiplier;
+	public float AirMultiplier;*/
 
 	[Header("Ground Check")]
 	public IsFeetOnGround IsFeetOnGround;
@@ -32,16 +34,14 @@ public class PlayerMovement : MonoBehaviour
 
 	[Header("import stuff")]
 	public Transform Player;
+	public Transform Head;
 	public Camera Camera;
-	private Rigidbody rigidBody;
 	private Animator anim;
 	private float horizontalInput;
 	private float verticalInput;
 
 	private void Awake()
 	{
-		rigidBody = GetComponent<Rigidbody>();
-		rigidBody.freezeRotation = true;
 		anim = GetComponent<Animator>();
 		currentState = StateEnum.Idle;
 		AttackingEnemy = false;
@@ -50,7 +50,6 @@ public class PlayerMovement : MonoBehaviour
 	{
 		GroundCheck();
 		KeyInput();
-		SpeedControl();
 		CheckState();
 	}
 
@@ -68,6 +67,7 @@ public class PlayerMovement : MonoBehaviour
 			case StateEnum.Walk: NormalWalk(); break;
 			case StateEnum.Sprint: Sprinting(); break;
 			case StateEnum.Crouch: CrouchingPlayer(); break;
+			//case StateEnum.Jump: Jump(); break;
 			case StateEnum.Attack: AttackWithSword(); break;
 		}
 	}
@@ -96,15 +96,6 @@ public class PlayerMovement : MonoBehaviour
 	private void GroundCheck()
     {
         isGrounded = IsFeetOnGround.OnGround;
-
-        if (isGrounded)
-        {
-            rigidBody.drag = GroundDrag;
-        }
-        if (!isGrounded)
-        {
-            rigidBody.drag = 0;
-        }
     }
 
     private void RotatePlayer()
@@ -119,7 +110,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-	private void SpeedControl()
+	/*private void SpeedControl()
 	{
 		Vector3 flatVel = new Vector3(rigidBody.velocity.x, 0f, rigidBody.velocity.z);
 		if (flatVel.magnitude > currentSpeed)
@@ -127,12 +118,24 @@ public class PlayerMovement : MonoBehaviour
 			Vector3 limiedVel = flatVel.normalized * currentSpeed;
 			rigidBody.velocity = new Vector3(limiedVel.x, rigidBody.velocity.y, limiedVel.z);
 		}
-	}
+	}*/
 
 	private void MovePlayer()
 	{
-		if (verticalInput > 0) { transform.Translate(Vector3.forward * Time.deltaTime * currentSpeed); }
-		if (verticalInput < 0) { transform.Translate(Vector3.back * Time.deltaTime * currentSpeed); }
+
+		/*if (verticalInput > 0) { transform.Translate(Vector3.forward * Time.deltaTime * currentSpeed); }
+        if (verticalInput < 0) { transform.Translate(Vector3.back * Time.deltaTime * currentSpeed); }*/
+
+		if (verticalInput > 0) 
+		{
+			CharacterController.Move(transform.forward * Time.deltaTime * currentSpeed);
+        }
+		if (verticalInput < 0)
+		{
+			CharacterController.Move(-transform.forward * Time.deltaTime * currentSpeed);
+		}
+
+
 	}
 
 	private void NormalWalk()
@@ -194,16 +197,15 @@ public class PlayerMovement : MonoBehaviour
 
 	/*private void Jump()
 	{
-		anim.SetInteger("PlayerState", 4);
-		rigidBody.velocity = new Vector3(rigidBody.velocity.x, 0f, rigidBody.velocity.z);
-		rigidBody.AddForce(transform.up * JumpForce, ForceMode.Impulse);
-		
-
-		if (isGrounded != true)
+		if (isGrounded)
 		{
-			Debug.Log("hii");
-			currentState = StateEnum.Idle;
-		}
+            anim.SetInteger("PlayerState", 4);
+            rigidBody.velocity = new Vector3(rigidBody.velocity.x, 0f, rigidBody.velocity.z);
+            rigidBody.AddForce(transform.up * JumpForce, ForceMode.Impulse);
+        } else
+		{
+            currentState = StateEnum.Idle;
+        }
 	}*/
 	
 
@@ -212,6 +214,14 @@ public class PlayerMovement : MonoBehaviour
 		anim.SetInteger("PlayerState", 5);
 		AttackingEnemy = true;
 		currentState = StateEnum.Idle;
+	}
+
+	private void OnTriggerEnter(Collider other)
+	{
+		if (other.CompareTag("Enemy"))
+		{
+			
+		}
 	}
 }
 	
