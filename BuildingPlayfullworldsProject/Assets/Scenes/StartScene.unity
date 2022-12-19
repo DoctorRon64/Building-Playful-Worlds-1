@@ -364,7 +364,7 @@ GameObject:
   - component: {fileID: 279442892}
   - component: {fileID: 279442891}
   - component: {fileID: 279442890}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: Hard Walls (2)
   m_TagString: HardWall
   m_Icon: {fileID: 0}
@@ -1928,7 +1928,7 @@ GameObject:
   - component: {fileID: 984510314}
   - component: {fileID: 984510313}
   - component: {fileID: 984510319}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: Hard Walls (3)
   m_TagString: HardWall
   m_Icon: {fileID: 0}
