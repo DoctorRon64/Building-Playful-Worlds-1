@@ -8301,7 +8301,7 @@ MonoBehaviour:
   SeeTroughMaterial: {fileID: 2100000, guid: 05311e169194e054f8e52d01eda22fc7, type: 2}
   PlayerMask:
     serializedVersion: 2
-    m_Bits: 384
+    m_Bits: 896
 --- !u!43 &1503480292
 Mesh:
   m_ObjectHideFlags: 0
