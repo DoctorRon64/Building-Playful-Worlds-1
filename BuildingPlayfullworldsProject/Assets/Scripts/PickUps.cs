@@ -13,7 +13,6 @@ public class PickUps : MonoBehaviour
         {
             Collided = true;
             gameObject.SetActive(false);
-            Debug.Log("pickupgone");
         }
     }
 }

@@ -22,7 +22,6 @@ public class Tutorial : MonoBehaviour
 
 	private void Update()
 	{
-        Debug.Log(tutorialIndex);
         verticalInput = Input.GetAxisRaw("Vertical");
         Vector2 mousedir = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
 
