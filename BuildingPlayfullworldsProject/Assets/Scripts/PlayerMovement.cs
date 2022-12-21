@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using TMPro;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -10,7 +11,8 @@ public class PlayerMovement : MonoBehaviour
 
 	[Header("Combat")]
 	public int Health;
-	public int DamageDealing;
+	public int AttackDamage;
+	public int TakingDamage;
 	public bool AttackingEnemy;
 
 	[Header("Movement")]
@@ -35,6 +37,7 @@ public class PlayerMovement : MonoBehaviour
 	[Header("import stuff")]
 	public Transform Player;
 	public Transform Head;
+	public TMP_Text HealthText;
 	public Camera Camera;
 	private Animator anim;
 	private float horizontalInput;
@@ -51,6 +54,7 @@ public class PlayerMovement : MonoBehaviour
 		GroundCheck();
 		KeyInput();
 		CheckState();
+		HealthText.text = Health.ToString();
 	}
 
 	private void FixedUpdate()
@@ -220,7 +224,7 @@ public class PlayerMovement : MonoBehaviour
 	{
 		if (other.CompareTag("Enemy"))
 		{
-			
+			Health -= TakingDamage;
 		}
 	}
 }

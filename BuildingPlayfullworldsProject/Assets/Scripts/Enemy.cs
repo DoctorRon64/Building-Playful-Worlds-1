@@ -117,7 +117,7 @@ public class Enemy : MonoBehaviour
 		{
 			if (Player.GetComponent<PlayerMovement>().AttackingEnemy == true) 
 			{
-				Health -= Player.GetComponent<PlayerMovement>().DamageDealing;
+				Health -= Player.GetComponent<PlayerMovement>().AttackDamage;
 			}
 		}
 	}
