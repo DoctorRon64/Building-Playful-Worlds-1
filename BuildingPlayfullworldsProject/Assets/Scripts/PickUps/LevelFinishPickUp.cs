@@ -7,25 +7,48 @@ using System;
 public class LevelFinishPickUp : PickUps
 {
 	public GameObject WinScreen;
+	public GameObject LoseScreen;
+	public PlayerMovement PlayerScript;
 
-	private void Start()
+	private void Awake()
 	{
 		WinScreen.SetActive(false);
+		LoseScreen.SetActive(false);
+		PlayerScript = FindObjectOfType<PlayerMovement>();
+	}
+
+	private void Update()
+	{
+		LoseScene();
 	}
 
 	public override void ChechWichPickUpState()
 	{
-		Debug.Log("joebiden2");
 		base.ChechWichPickUpState();
-		Debug.Log("joebiden2");
 		WinScreen.SetActive(true);
-		Invoke("ToNextScene", 5);
-		Collided = true;
 		gameObject.SetActive(false);
+		Collided = true;
 	}
 
-	private void ToNextScene()
+	private void LoseScene()
+	{
+		if (PlayerScript.Health <= 0)
+		{
+			LoseScreen.SetActive(true);
+		}
+	}
+	public void ToNextScene()
 	{
 		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+	}
+
+	public void RestartingScene()
+	{
+		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+	}
+
+	public void GoToMainMenu()
+	{
+		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 2);
 	}
 }

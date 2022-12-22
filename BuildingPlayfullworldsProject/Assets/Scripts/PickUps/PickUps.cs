@@ -11,15 +11,12 @@ public class PickUps : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("yobama");
             ChechWichPickUpState();
         }
     }
 
     public virtual void ChechWichPickUpState()
 	{
-		//do nothing
-		Debug.Log("do notthing");
 		Collided = true;
 		gameObject.SetActive(false);
 	}

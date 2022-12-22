@@ -13,7 +13,7 @@ public class Enemy : MonoBehaviour
 
 	[Header("NavMeshAgent")]
     public NavMeshAgent NavMeshAgent;
-    private PatrolPoints[] patrolPoints;
+	[SerializeField] private PatrolPoints[] PatrolPoints;
     public int patrolIndex = 0;
 
 	[Header("Reference Object")]
@@ -27,15 +27,14 @@ public class Enemy : MonoBehaviour
 	private void Awake()
 	{
         NavMeshAgent = GetComponent<NavMeshAgent>();
-		patrolPoints = FindObjectsOfType<PatrolPoints>();
 		anim = GetComponent<Animator>();
 	}
 
 	private void Start()
 	{
-        if (patrolPoints.Length != 0)
+        if (PatrolPoints.Length != 0)
 		{
-            NavMeshAgent.SetDestination(patrolPoints[patrolIndex].transform.position);
+            NavMeshAgent.SetDestination(PatrolPoints[patrolIndex].transform.position);
 		}
 	}
 
@@ -68,7 +67,7 @@ public class Enemy : MonoBehaviour
 		CooldownTimer -= 1000 * Time.deltaTime;
 		if (CooldownTimer <= 0)
 		{
-			NavMeshAgent.SetDestination(patrolPoints[patrolIndex].transform.position);
+			NavMeshAgent.SetDestination(PatrolPoints[patrolIndex].transform.position);
 			currentState = StateEnum.Patrol;
 		}
 
@@ -81,12 +80,12 @@ public class Enemy : MonoBehaviour
 		if (NavMeshAgent.remainingDistance <= NavMeshAgent.stoppingDistance)
 		{
 			patrolIndex++;
-			if (patrolIndex < patrolPoints.Length)
+			if (patrolIndex < PatrolPoints.Length)
 			{
 				currentState = StateEnum.Idle;
 			}
 
-			if (patrolIndex >= patrolPoints.Length)
+			if (patrolIndex >= PatrolPoints.Length)
 			{
 				patrolIndex = -1;
 			}

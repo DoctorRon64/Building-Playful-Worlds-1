@@ -54,6 +54,7 @@ public class PlayerMovement : MonoBehaviour
 		GroundCheck();
 		KeyInput();
 		CheckState();
+		IsPlayerDead();
 		HealthText.text = Health.ToString();
 	}
 
@@ -61,6 +62,15 @@ public class PlayerMovement : MonoBehaviour
 	{
 		MovePlayer();
 		RotatePlayer();
+	}
+
+	private void IsPlayerDead()
+	{
+		if (Health <= 0)
+		{
+			currentState = StateEnum.Idle;
+			
+		}
 	}
 
     private void CheckState()
@@ -114,22 +124,8 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-	/*private void SpeedControl()
-	{
-		Vector3 flatVel = new Vector3(rigidBody.velocity.x, 0f, rigidBody.velocity.z);
-		if (flatVel.magnitude > currentSpeed)
-		{
-			Vector3 limiedVel = flatVel.normalized * currentSpeed;
-			rigidBody.velocity = new Vector3(limiedVel.x, rigidBody.velocity.y, limiedVel.z);
-		}
-	}*/
-
 	private void MovePlayer()
 	{
-
-		/*if (verticalInput > 0) { transform.Translate(Vector3.forward * Time.deltaTime * currentSpeed); }
-        if (verticalInput < 0) { transform.Translate(Vector3.back * Time.deltaTime * currentSpeed); }*/
-
 		if (verticalInput > 0) 
 		{
 			CharacterController.Move(transform.forward * Time.deltaTime * currentSpeed);
@@ -138,8 +134,6 @@ public class PlayerMovement : MonoBehaviour
 		{
 			CharacterController.Move(-transform.forward * Time.deltaTime * currentSpeed);
 		}
-
-
 	}
 
 	private void NormalWalk()
@@ -175,11 +169,11 @@ public class PlayerMovement : MonoBehaviour
 		{
 			currentState = StateEnum.Walk;
 		}
-/*
+
 		if (horizontalInput == 0 && verticalInput == 0)
 		{
 			currentState = StateEnum.Idle;
-		}*/
+		}
 	}
 
 	private void Sprinting()
@@ -211,7 +205,6 @@ public class PlayerMovement : MonoBehaviour
             currentState = StateEnum.Idle;
         }
 	}*/
-	
 
 	private void AttackWithSword()
 	{
