@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Net.Sockets;
 using UnityEngine;
+using UnityEngine.Rendering.PostProcessing;
 
 public class CameraFollow : MonoBehaviour
 {
@@ -9,8 +10,16 @@ public class CameraFollow : MonoBehaviour
     public float SmoothSpeed;
     private Vector3 offSetCamera;
     private Vector3 velocityCamera = Vector3.zero;
+    private PostProcessVolume PostProsVol;
 
-    private void Start()
+	private void Awake()
+	{
+		PostProsVol = GetComponent<PostProcessVolume>();
+        PostProsVol.isGlobal = true;
+	}
+
+
+	private void Start()
     {
         player = FindObjectOfType<PlayerMovement>().transform;
         offSetCamera = transform.position;
