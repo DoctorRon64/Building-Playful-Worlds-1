@@ -13,71 +13,34 @@ public class Tutorial : MonoBehaviour
     public PickUps[] PickUpPoint;
     public GameObject Door;
     private int tutorialIndex;
-	private float verticalInput;
+    private float verticalInput;
+    public Vector2 mousedir;
 
     void Start()
     {
         text.text = TutorialText[0];
         tutorialIndex = 0;
     }
-
-	private void Update()
-	{
+    private void Update()
+    {
         verticalInput = Input.GetAxisRaw("Vertical");
-        Vector2 mousedir = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+        mousedir = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
 
-        if (mousedir.magnitude != 0 && tutorialIndex == 0)
-		{
-            tutorialIndex++;
-            text.text = TutorialText[1];
-        }
-        
-        if (verticalInput > 0 && tutorialIndex == 1 && PickUpPoint[0].Collided)
-		{
-            tutorialIndex++;
-            Door.SetActive(false);
-            text.text = TutorialText[2];
-		}
-
-        if (tutorialIndex == 2 && PickUpPoint[1].Collided)
-		{
-            tutorialIndex++;
-            text.text = TutorialText[3];
-		}
-
-        if (Input.GetKey(KeyCode.LeftControl) && tutorialIndex == 3)
-		{
-            tutorialIndex++;
-            text.text = TutorialText[4];
-		}
-
-        if (tutorialIndex == 4 && PickUpPoint[2].Collided)
-        {
-            tutorialIndex++;
-            text.text = TutorialText[5];
-        }
-
-		if (tutorialIndex == 5 && PickUpPoint[3].Collided)
-		{
-			tutorialIndex++;
-			text.text = TutorialText[6];
-		}
-
-        if (tutorialIndex == 6 && PickUpPoint[4].Collided)
-        {
-            tutorialIndex++;
-            text.text = TutorialText[7];
-        }
-
-        if (tutorialIndex == 7 && PickUpPoint[5].Collided)
-        {
-            tutorialIndex++;
-            text.text = TutorialText[8];
-        }
+        TutorialSwitch();
     }
 
-    
-
-
-
+    private void TutorialSwitch()
+    {
+        switch (tutorialIndex)
+        {
+            case 0: if (mousedir.magnitude != 0) { tutorialIndex++; text.text = TutorialText[1]; } break;
+            case 1: if (verticalInput > 0 && PickUpPoint[0].Collided) { tutorialIndex++; Door.SetActive(false); text.text = TutorialText[2]; } break;
+            case 2: if (PickUpPoint[1].Collided) { tutorialIndex++; text.text = TutorialText[3]; } break;
+            case 3: if (Input.GetKey(KeyCode.LeftControl)) { tutorialIndex++; text.text = TutorialText[4]; } break;
+            case 4: if (PickUpPoint[2].Collided) { tutorialIndex++; text.text = TutorialText[5]; } break;
+            case 5: if (PickUpPoint[3].Collided) { tutorialIndex++; text.text = TutorialText[6]; } break;
+            case 6: if (PickUpPoint[4].Collided) { tutorialIndex++; text.text = TutorialText[7]; } break;
+            case 7: if (PickUpPoint[5].Collided) { tutorialIndex++; text.text = TutorialText[8]; } break;
+        }
+    }
 }

@@ -7,7 +7,6 @@ public class Level1Manager : MonoBehaviour
     public GameObject[] Door;
     public PickUps[] PickUpPoint;
 
-    // Update is called once per frame
     void Update()
     {
         if (PickUpPoint[0].Collided && PickUpPoint[1].Collided)

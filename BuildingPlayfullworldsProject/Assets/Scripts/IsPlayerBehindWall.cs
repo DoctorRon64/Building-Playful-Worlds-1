@@ -27,7 +27,6 @@ public class IsPlayerBehindWall : MonoBehaviour
                 Model.GetComponent<Renderer>().material = SeeTroughMaterial;
             }       
         }
-
         Debug.DrawLine(Camera.transform.position, Target.transform.position, Color.black, 1);
     }
 }

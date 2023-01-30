@@ -23,11 +23,6 @@ public class PlayerMovement : MonoBehaviour
 	public float CrouchSpeed;
 	public LayerMask CheckWallInfront;
 
-	/*[Header("Jumping")]
-	public float JumpForce;
-	public float JumpCooldown;
-	public float AirMultiplier;*/
-
 	[Header("Ground Check")]
 	public IsFeetOnGround IsFeetOnGround;
 	public float GroundDrag;
@@ -81,7 +76,6 @@ public class PlayerMovement : MonoBehaviour
 			case StateEnum.Walk: NormalWalk(); break;
 			case StateEnum.Sprint: Sprinting(); break;
 			case StateEnum.Crouch: CrouchingPlayer(); break;
-			//case StateEnum.Jump: Jump(); break;
 			case StateEnum.Attack: AttackWithSword(); break;
 		}
 	}
@@ -192,20 +186,6 @@ public class PlayerMovement : MonoBehaviour
 			currentState = StateEnum.Idle;
 		}
 	}
-
-	/*private void Jump()
-	{
-		if (isGrounded)
-		{
-            anim.SetInteger("PlayerState", 4);
-            rigidBody.velocity = new Vector3(rigidBody.velocity.x, 0f, rigidBody.velocity.z);
-            rigidBody.AddForce(transform.up * JumpForce, ForceMode.Impulse);
-        } else
-		{
-            currentState = StateEnum.Idle;
-        }
-	}*/
-
 	private void AttackWithSword()
 	{
 		anim.SetInteger("PlayerState", 5);

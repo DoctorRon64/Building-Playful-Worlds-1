@@ -14,7 +14,6 @@ public class PickUps : MonoBehaviour
             ChechWichPickUpState();
         }
     }
-
     public virtual void ChechWichPickUpState()
 	{
 		Collided = true;

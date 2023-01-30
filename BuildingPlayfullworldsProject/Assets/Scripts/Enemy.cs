@@ -26,7 +26,7 @@ public class Enemy : MonoBehaviour
 
 	private void Awake()
 	{
-        NavMeshAgent = GetComponent<NavMeshAgent>();
+		NavMeshAgent = GetComponent<NavMeshAgent>();
 		anim = GetComponent<Animator>();
 	}
 
@@ -40,10 +40,9 @@ public class Enemy : MonoBehaviour
 
 	private void Update()
 	{
-        CheckState();
+		CheckState();
 		IfHealthIsToLow();
 	}
-
 	private void CheckState()
 	{
         switch (currentState)
@@ -70,7 +69,6 @@ public class Enemy : MonoBehaviour
 			NavMeshAgent.SetDestination(PatrolPoints[patrolIndex].transform.position);
 			currentState = StateEnum.Patrol;
 		}
-
 	}
 
 	private void PatrolBehaviour()
@@ -120,7 +118,6 @@ public class Enemy : MonoBehaviour
 			}
 		}
 	}
-
 	private void IfHealthIsToLow()
 	{
 		if (Health < 0)

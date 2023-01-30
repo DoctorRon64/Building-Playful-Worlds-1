@@ -756,7 +756,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh47970
+  m_Name: pb_Mesh26314
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -5056,6 +5056,7 @@ MonoBehaviour:
   - {fileID: 1022895963}
   - {fileID: 1258566175}
   Door: {fileID: 1782156979}
+  mousedir: {x: 0, y: 0}
 --- !u!1 &619195466
 GameObject:
   m_ObjectHideFlags: 0
@@ -10922,7 +10923,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-25324
+  m_Name: pb_Mesh-1742
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
