@@ -95,7 +95,7 @@ public class PlayerMovement : MonoBehaviour
 			currentState = StateEnum.Attack;
 		}
 
-		if (verticalInput != 0 && currentState == StateEnum.Idle)
+		if ((verticalInput != 0 || horizontalInput != 0) && currentState == StateEnum.Idle)
 		{
 			currentState = StateEnum.Walk;
 		}
@@ -127,6 +127,14 @@ public class PlayerMovement : MonoBehaviour
 		if (verticalInput < 0)
 		{
 			CharacterController.Move(-transform.forward * Time.deltaTime * currentSpeed);
+		}
+		if (horizontalInput > 0)
+		{
+			CharacterController.Move(Vector3.right * Time.deltaTime * currentSpeed);
+		}
+		if (horizontalInput < 0)
+		{
+			CharacterController.Move(-Vector3.right * Time.deltaTime * currentSpeed);
 		}
 	}
 
