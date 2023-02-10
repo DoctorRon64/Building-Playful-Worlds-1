@@ -35,8 +35,8 @@ public class PlayerMovement : MonoBehaviour
 	public TMP_Text HealthText;
 	public Camera Camera;
 	private Animator anim;
-	private float horizontalInput;
-	private float verticalInput;
+	public float horizontalInput;
+	public float verticalInput;
 
 	private void Awake()
 	{
@@ -88,7 +88,7 @@ public class PlayerMovement : MonoBehaviour
 	private void KeyInput()
 	{
 		horizontalInput = Input.GetAxisRaw("Horizontal");
-		verticalInput = Input.GetAxisRaw("Vertical");
+		verticalInput = Input.GetAxis("Vertical");
 
 		if (Input.GetKey(KeyCode.E))
 		{
