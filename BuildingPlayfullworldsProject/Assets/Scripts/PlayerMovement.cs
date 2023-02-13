@@ -87,7 +87,7 @@ public class PlayerMovement : MonoBehaviour
 	private void KeyInput()
 	{
 		horizontalInput = Input.GetAxisRaw("Horizontal");
-		verticalInput = Input.GetAxis("Vertical");
+		verticalInput = Input.GetAxisRaw("Vertical");
 
 		if (Input.GetKey(KeyCode.E))
 		{

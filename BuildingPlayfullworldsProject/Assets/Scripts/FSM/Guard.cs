@@ -13,8 +13,6 @@ public class Guard : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         PlayerScript = FindObjectOfType<PlayerMovement>();
-
-        
     }
     private void Start()
     {

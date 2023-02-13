@@ -3,7 +3,7 @@
 public class IdleState : State
 {
     [SerializeField] private float maxTime = 3f;
-    [SerializeField] private float minTime = 3f;
+    [SerializeField] private float minTime = 1f;
     private float waitTime = 0;
     public override void OnEnter()
     {

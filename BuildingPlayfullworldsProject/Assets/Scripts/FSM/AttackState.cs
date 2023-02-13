@@ -12,7 +12,7 @@ public class AttackState : State
     public override void OnUpdate()
     {
         //Transition
-        if(Vector3.Distance(transform.position, Player.transform.position) > stoppingDistance * 2)
+        if(Vector3.Distance(transform.position, Player.transform.position) > viewDistance)
         {
             Controller.SwitchState(typeof(PatrolState));
         }
