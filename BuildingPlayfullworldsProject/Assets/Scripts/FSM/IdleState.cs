@@ -23,7 +23,7 @@ public class IdleState : State
             Controller.SwitchState(typeof(PatrolState));
         }
 
-        if (Vector3.Distance(transform.position, Player.transform.position) < stoppingDistance)
+        if (Vector3.Distance(transform.position, Player.transform.position) < viewDistance)
         {
             Controller.SwitchState(typeof(AttackState));
         }

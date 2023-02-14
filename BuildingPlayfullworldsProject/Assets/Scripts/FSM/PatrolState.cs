@@ -30,7 +30,7 @@ public class PatrolState : State
         //Move
         Controller.Controller.MoveToPosition(patrolPoints[index].position);
 
-        if (Vector3.Distance(transform.position, Player.transform.position) < stoppingDistance)
+        if (Vector3.Distance(transform.position, Player.transform.position) < viewDistance)
         {
             Controller.SwitchState(typeof(AttackState));
         }

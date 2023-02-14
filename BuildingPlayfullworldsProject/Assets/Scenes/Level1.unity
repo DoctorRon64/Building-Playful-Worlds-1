@@ -4610,6 +4610,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Agent
       objectReference: {fileID: 0}
+    - target: {fileID: 2166444912461088558, guid: 59b328d247093c848bf0e2fa0b5c69e7, type: 3}
+      propertyPath: viewDistance
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7292591877314119139, guid: 59b328d247093c848bf0e2fa0b5c69e7, type: 3}
       propertyPath: index
       value: 2
